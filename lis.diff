@@ -1,0 +1,35 @@
+--- lis.py.orig	2014-05-26 01:31:47.083058200 -0400
++++ lis.py	2014-06-19 11:41:40.754441900 -0400
+@@ -4,14 +4,12 @@
+ 
+ ################ Symbol, Env classes
+ 
+-from __future__ import division
+-
+ Symbol = str
+ 
+ class Env(dict):
+     "An environment: a dict of {'var':val} pairs, with an outer Env."
+     def __init__(self, parms=(), args=(), outer=None):
+-        self.update(zip(parms,args))
++        self.update(list(zip(parms,args)))
+         self.outer = outer
+     def find(self, var):
+         "Find the innermost Env where var appears."
+@@ -22,7 +20,7 @@
+     import math, operator as op
+     env.update(vars(math)) # sin, sqrt, ...
+     env.update(
+-     {'+':op.add, '-':op.sub, '*':op.mul, '/':op.div, 'not':op.not_,
++     {'+':op.add, '-':op.sub, '*':op.mul, '/':op.truediv, 'not':op.not_,
+       '>':op.gt, '<':op.lt, '>=':op.ge, '<=':op.le, '=':op.eq, 
+       'equal?':op.eq, 'eq?':op.is_, 'length':len, 'cons':lambda x,y:[x]+y,
+       'car':lambda x:x[0],'cdr':lambda x:x[1:], 'append':op.add,  
+@@ -109,5 +107,5 @@
+ def repl(prompt='lis.py> '):
+     "A prompt-read-eval-print loop."
+     while True:
+-        val = eval(parse(raw_input(prompt)))
+-        if val is not None: print to_string(val)
++        val = eval(parse(input(prompt)))
++        if val is not None: print(to_string(val))
